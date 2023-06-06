@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",                    
+    "module": "NodeNext",                 
+    "allowJs": true,
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "strict": true,         
+    "noImplicitAny": true
+  },
+  "include": [
+    "src",
+    "test"
+  ]
+}
