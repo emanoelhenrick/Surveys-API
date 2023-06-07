@@ -7,7 +7,9 @@
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "build": "tsup src",
-    "test": "vitest"
+    "test:unit": "vitest -c vitest-unit.config.ts",
+    "test:integration": "vitest -c vitest-integration.config.ts",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
   "devDependencies": {
     "@swc/core": "^1.3.35",
     "@types/node": "^20.2.5",
+    "@vitest/coverage-c8": "^0.32.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
     "tsup": "^6.6.3",
     "tsx": "^3.12.3",
