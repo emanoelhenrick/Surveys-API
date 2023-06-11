@@ -21,7 +21,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
         email: 'valid_email@mail.com',
         password: 'hashed_password'
       }
-      return await new Promise(resolve => { resolve({ fakeAccount }) })
+      return await new Promise(resolve => { resolve(fakeAccount) })
     }
   }
   return new AddAccountRepositoryStub()
@@ -29,7 +29,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 
 interface SutTypes {
   encrypterStub: Encrypter
-  addAccountRepository: AddAccountRepository
+  addAccountRepositoryStub: AddAccountRepository
   sut: DbAddAccount
 }
 
@@ -94,5 +94,25 @@ describe('DbAddAccount Usecase', () => {
       email: 'valid_email@mail.com',
       password: 'hashed_password'
     })
+  })
+
+  test('Should throw if AddAccountRepository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+
+    vitest
+      .spyOn(addAccountRepositoryStub, 'add')
+      .mockReturnValueOnce(new Promise(
+        (resolve, reject) => {
+          reject(new Error())
+        }))
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    }
+
+    const promise = sut.add(accountData)
+    await expect(promise).rejects.toThrow()
   })
 })
