@@ -19,7 +19,7 @@ export const MongoHelper = {
     return this.client.db('prod').collection(name)
   },
 
-  map: <T>(collection: any): T => {
+  map <T>(collection: any): T {
     const { _id, ...documentWithoutId } = collection
     return Object.assign({}, documentWithoutId, { id: _id.toString() })
   }
