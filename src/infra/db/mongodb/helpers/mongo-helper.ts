@@ -17,11 +17,5 @@ export const MongoHelper = {
     const isDev = this.env === 'dev'
     if (isDev) return this.client.db('test').collection(name)
     return this.client.db('prod').collection(name)
-  },
-
-  async dropCollection (name: string): Promise<boolean> {
-    const isDev = this.env === 'dev'
-    if (isDev) return await this.client.db('test').collection(name).drop()
-    return await this.client.db('prod').collection(name).drop()
   }
 }

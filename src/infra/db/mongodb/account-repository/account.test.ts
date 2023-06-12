@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
 
@@ -10,8 +10,14 @@ describe('Account Mongo Repository', () => {
   })
 
   afterAll(async () => {
-    await MongoHelper.dropCollection('accounts')
+    const accountCollection = MongoHelper.getCollection('accounts')
+    await accountCollection.drop()
     await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    const accountCollection = MongoHelper.getCollection('accounts')
+    await accountCollection.deleteMany({})
   })
 
   const makeSut = (): AccountMongoRepository => {
