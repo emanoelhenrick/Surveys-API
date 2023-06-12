@@ -1,16 +1,20 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { AccountMongoRepository } from './account'
+
+const MONGO_URL = 'mongodb://docker:docker@localhost:27017/?authMechanism=DEFAULT'
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(globalThis.__MONGO_URI__)
+    await MongoHelper.connect(MONGO_URL, 'dev')
   })
 
   afterAll(async () => {
+    await MongoHelper.dropCollection('accounts')
     await MongoHelper.disconnect()
   })
 
-  test('Should rturn an account on success', async () => {
+  test('Should return an account on success', async () => {
     const sut = new AccountMongoRepository()
 
     const account = await sut.add({
