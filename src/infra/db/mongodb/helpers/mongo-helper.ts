@@ -17,5 +17,10 @@ export const MongoHelper = {
     const isDev = this.env === 'dev'
     if (isDev) return this.client.db('test').collection(name)
     return this.client.db('prod').collection(name)
+  },
+
+  map: <T>(collection: any): T => {
+    const { _id, ...documentWithoutId } = collection
+    return Object.assign({}, documentWithoutId, { id: _id.toString() })
   }
 }
