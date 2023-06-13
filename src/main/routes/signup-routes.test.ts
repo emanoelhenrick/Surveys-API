@@ -1,8 +1,7 @@
 import request from 'supertest'
 import app from '../config/app'
-import { afterAll, beforeAll, describe, test } from 'vitest'
+import { afterAll, beforeAll, describe, test, beforeEach } from 'vitest'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
-import { beforeEach } from 'node:test'
 
 describe('SignUp Routes', () => {
   const MONGO_URL = 'mongodb://docker:docker@localhost:27017/?authMechanism=DEFAULT'
