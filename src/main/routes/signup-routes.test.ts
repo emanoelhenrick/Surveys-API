@@ -2,9 +2,10 @@ import request from 'supertest'
 import app from '../config/app'
 import { afterAll, beforeAll, describe, test, beforeEach } from 'vitest'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import env from '../config/env'
 
 describe('SignUp Routes', () => {
-  const MONGO_URL = 'mongodb://docker:docker@localhost:27017/?authMechanism=DEFAULT'
+  const MONGO_URL = env.mongoUrl
 
   beforeAll(async () => {
     await MongoHelper.connect(MONGO_URL, 'dev')

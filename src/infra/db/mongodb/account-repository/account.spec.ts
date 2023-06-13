@@ -1,8 +1,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
+import env from '../../../../main/config/env'
 
-const MONGO_URL = 'mongodb://docker:docker@localhost:27017/?authMechanism=DEFAULT'
+const MONGO_URL = env.mongoUrl
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {

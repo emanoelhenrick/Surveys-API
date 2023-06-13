@@ -1,8 +1,8 @@
 {
-  "name": "clean-api",
+  "name": "auth-api",
   "version": "1.0.0",
-  "description": "A API made with clean code and clean architecture",
-  "main": "src/server.ts",
+  "description": "A Authentication API made with clean architecture and DDD",
+  "main": "src/main/server.ts",
   "scripts": {
     "dev": "tsx watch src/main/server.ts",
     "start": "tsx src/main/server.ts",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "fast-glob": "^3.2.12",
     "mongodb": "^5.6.0",
