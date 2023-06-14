@@ -1,5 +1,5 @@
 import { describe, expect, test, vitest } from 'vitest'
-import { DbAddAccount } from './db-add-account'
+import { DbAddAccount } from './usecase'
 import { type Encrypter } from '../../protocols/Encrypter'
 import { type AddAccountRepository, type AccountModel, type AddAccountModel } from './db-add-account-procotols'
 
