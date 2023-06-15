@@ -7,6 +7,7 @@
     "dev": "tsx watch src/main/server.ts",
     "start": "tsx src/main/server.ts",
     "build": "tsup src",
+    "test": "vitest",
     "test:unit": "vitest -c vitest-unit.config.ts",
     "test:integration": "vitest -c vitest-integration.config.ts",
     "test:coverage": "vitest --coverage"
