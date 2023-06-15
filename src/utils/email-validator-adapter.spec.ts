@@ -4,10 +4,7 @@ import validator from 'validator'
 
 vi.mock('validator', async () => {
   const actual: object = await vi.importActual('validator')
-  return {
-    ...actual,
-    isEmail (): boolean { return true }
-  }
+  return { ...actual, isEmail (): boolean { return true } }
 })
 
 const makeSut = (): EmailValidatorAdapter => {
