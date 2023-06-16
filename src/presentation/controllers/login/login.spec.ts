@@ -1,6 +1,6 @@
 import { describe, expect, test, vitest } from 'vitest'
 import { LoginController } from './login'
-import { badRequest, serverError, unauthorized } from '../../helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { type HttpRequest, type EmailValidator } from '../signup/signup-protocols'
 import { type Authentication } from '../../../domain/usecases/authentication'
@@ -111,5 +111,11 @@ describe('Login Controller', () => {
       .mockReturnValueOnce(new Promise(resolve => { resolve(null as unknown as string) }))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(unauthorized())
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
   })
 })
