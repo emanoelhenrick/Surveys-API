@@ -2,12 +2,16 @@ import { describe, expect, test, vitest } from 'vitest'
 import { LoginController } from './login'
 import { badRequest } from '../../helpers/http-helper'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { type EmailValidator } from '../signup/signup-protocols'
+import { type HttpRequest, type EmailValidator } from '../signup/signup-protocols'
 
 interface SutTypes {
   sut: LoginController
   emailValidatorStub: EmailValidator
 }
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: { email: 'any_email@mail.com', password: 'any_password' }
+})
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -31,48 +35,32 @@ const makeSut = (): SutTypes => {
 describe('Login Controller', () => {
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
-
-    const httpRequest = {
-      body: { password: 'any_password' }
-    }
+    const httpRequest = { body: { password: 'any_password' } }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
 
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
-
-    const httpRequest = {
-      body: { email: 'any_email@mail.com' }
-    }
+    const httpRequest = { body: { email: 'any_email@mail.com' } }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('password')))
   })
 
   test('Should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
-
     vitest
       .spyOn(emailValidatorStub, 'isValid')
       .mockReturnValueOnce(false)
-
-    const httpRequest = {
-      body: { email: 'invalid_email', password: 'any_password' }
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
   })
 
   test('Should call email validator with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
-
     const isValidSpy = vitest.spyOn(emailValidatorStub, 'isValid')
-    const httpRequest = {
-      body: { email: 'any_email@mail.com', password: 'any_password' }
-    }
-    await sut.handle(httpRequest)
-
+    await sut.handle(makeFakeRequest())
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
 })
