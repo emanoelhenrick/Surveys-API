@@ -1,23 +1,13 @@
-import { type HttpRequest, type AccountModel, type AddAccount, type AddAccountModel, type EmailValidator, type Validation } from './signup-protocols'
-import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { type HttpRequest, type AccountModel, type AddAccount, type AddAccountModel, type Validation } from './signup-protocols'
+import { MissingParamError, ServerError } from '../../errors'
 import { describe, expect, test, vitest } from 'vitest'
 import { SignUpController } from './signup'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 
 interface SutTypes {
   sut: SignUpController
-  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
   validationStub: Validation
-}
-
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): boolean {
-      return true
-    }
-  }
-  return new EmailValidatorStub()
 }
 
 const makeAddAccount = (): AddAccount => {
@@ -56,56 +46,19 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
-  const emailValidatorStub = makeEmailValidator()
   const validationStub = makeValidation()
   const sut = new SignUpController(
-    emailValidatorStub,
     addAccountStub,
     validationStub
   )
   return {
     sut,
-    emailValidatorStub,
     addAccountStub,
     validationStub
   }
 }
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if an invalid email is provided', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-
-    vitest
-      .spyOn(emailValidatorStub, 'isValid')
-      .mockReturnValueOnce(false)
-
-    const httpRequest = makeFakeRequest()
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
-  })
-
-  test('Should call email validator with correct email', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-
-    const isValidSpy = vitest.spyOn(emailValidatorStub, 'isValid')
-    const httpRequest = makeFakeRequest()
-    await sut.handle(httpRequest)
-    expect(isValidSpy).toHaveBeenCalledWith('valid_email@mail.com')
-  })
-
-  test('Should return 500 if EmailValidator throws', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-
-    vitest
-      .spyOn(emailValidatorStub, 'isValid')
-      .mockImplementationOnce(() => { throw new ServerError(null as unknown as string) })
-
-    const httpRequest = makeFakeRequest()
-    const httpResponse = await sut.handle(httpRequest)
-
-    expect(httpResponse).toEqual(serverError(new ServerError(null as unknown as string)))
-  })
-
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
 
