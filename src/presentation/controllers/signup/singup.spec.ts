@@ -1,4 +1,4 @@
-import { type HttpRequest, type AccountModel, type AddAccount, type AddAccountModel, type EmailValidator } from './signup-protocols'
+import { type HttpRequest, type AccountModel, type AddAccount, type AddAccountModel, type EmailValidator, type Validation } from './signup-protocols'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { describe, expect, test, vitest } from 'vitest'
 import { SignUpController } from './signup'
@@ -8,6 +8,7 @@ interface SutTypes {
   sut: SignUpController
   emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
+  validationStub: Validation
 }
 
 const makeEmailValidator = (): EmailValidator => {
@@ -26,6 +27,15 @@ const makeAddAccount = (): AddAccount => {
     }
   }
   return new AddAccountStub()
+}
+
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Error {
+      return null!
+    }
+  }
+  return new ValidationStub()
 }
 
 const makeFakeAccount = (): AccountModel => ({
@@ -47,14 +57,17 @@ const makeFakeRequest = (): HttpRequest => ({
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
   const emailValidatorStub = makeEmailValidator()
+  const validationStub = makeValidation()
   const sut = new SignUpController(
     emailValidatorStub,
-    addAccountStub
+    addAccountStub,
+    validationStub
   )
   return {
     sut,
     emailValidatorStub,
-    addAccountStub
+    addAccountStub,
+    validationStub
   }
 }
 
@@ -196,5 +209,14 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(ok(makeFakeAccount()))
+  })
+
+  test('Should call Validation with correct value', async () => {
+    const { sut, validationStub } = makeSut()
+
+    const validateSpy = vitest.spyOn(validationStub, 'validate')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
