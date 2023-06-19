@@ -1,7 +1,7 @@
 import { describe, expect, test, vitest } from 'vitest'
 import { ValidationComposite } from './validation-composite'
 import { MissingParamError } from '../../errors'
-import { type Validation } from './validation'
+import { type Validation } from '../../protocols/validation'
 interface SutTypes {
   sut: ValidationComposite
   validationStubs: Validation[]
