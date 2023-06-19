@@ -12,6 +12,6 @@ describe('Required Field Validation', () => {
   test('Should return true if validation succeeds', () => {
     const sut = new RequiredFieldValidation('any_field')
     const response = sut.validate({ any_field: 'field' })
-    expect(response).toBeTruthy()
+    expect(response).toBeNull()
   })
 })

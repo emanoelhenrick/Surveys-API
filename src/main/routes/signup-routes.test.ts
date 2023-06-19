@@ -1,8 +1,9 @@
 import request from 'supertest'
-import app from '../config/app'
+
 import { afterAll, beforeAll, describe, test, beforeEach } from 'vitest'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import env from '../config/env'
+import app from '../config/app'
 
 describe('SignUp Routes', () => {
   const MONGO_URL = env.mongoUrl
@@ -11,15 +12,15 @@ describe('SignUp Routes', () => {
     await MongoHelper.connect(MONGO_URL, 'dev')
   })
 
+  beforeEach(async () => {
+    const accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.deleteMany({})
+  })
+
   afterAll(async () => {
     const accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.drop()
     await MongoHelper.disconnect()
-  })
-
-  beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.deleteMany({})
   })
 
   test('Should return an account on success', async () => {
