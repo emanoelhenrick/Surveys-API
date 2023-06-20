@@ -1,6 +1,6 @@
 import { describe, expect, test, vitest } from 'vitest'
-import { DbAddAccount } from './usecase'
-import { type Encrypter } from '../../protocols/Encrypter'
+import { DbAddAccount } from './db-add-account'
+import { type Encrypter } from '../../protocols/criptography/Encrypter'
 import { type AddAccountRepository, type AccountModel, type AddAccountModel } from './db-add-account-procotols'
 
 const makeEncrypter = (): Encrypter => {

@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest'
 import { type AccountModel } from '../add-account/db-add-account-procotols'
-import { type LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
+import { type LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { DbAuthentication } from './db-authentication'
 import { type AuthenticationModel } from '../../../domain/usecases/authentication'
 
