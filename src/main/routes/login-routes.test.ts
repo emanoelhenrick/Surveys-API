@@ -26,20 +26,6 @@ describe('Login Routes', () => {
     await MongoHelper.disconnect()
   })
 
-  describe('POST /signup', () => {
-    test('Should return an account on success', async () => {
-      await request(app)
-        .post('/api/signup')
-        .send({
-          name: 'Manel',
-          email: 'manel@mail.com',
-          password: '123456',
-          passwordConfirmation: '123456'
-        })
-        .expect(200)
-    })
-  })
-
   describe('POST /login', () => {
     test('Should return 200 on login', async () => {
       const passwordHashed = await hash('123456', 12)
@@ -65,6 +51,20 @@ describe('Login Routes', () => {
           password: '123456'
         })
         .expect(401)
+    })
+  })
+
+  describe('POST /signup', () => {
+    test('Should return an account on success', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Manel',
+          email: 'manel@mail.com',
+          password: '123456',
+          passwordConfirmation: '123456'
+        })
+        .expect(200)
     })
   })
 })

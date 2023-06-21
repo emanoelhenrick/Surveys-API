@@ -10,7 +10,10 @@
     "noImplicitAny": true
   },
   "include": [
-    "src",
-    "test"
+    "src"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts"
   ]
 }
