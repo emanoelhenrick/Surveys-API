@@ -1,15 +1,15 @@
 import { describe, expect, test, vitest } from 'vitest'
 import { DbAddAccount } from './db-add-account'
-import { type Encrypter } from '../../protocols/criptography/Encrypter'
+import { type Hasher } from '../../protocols/criptography/hasher'
 import { type AddAccountRepository, type AccountModel, type AddAccountModel } from './db-add-account-procotols'
 
-const makeEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt (password: string): Promise<string> {
+const makeHasher = (): Hasher => {
+  class HasherStub implements Hasher {
+    async hash (password: string): Promise<string> {
       return await new Promise(resolve => { resolve('hashed_password') })
     }
   }
-  return new EncrypterStub()
+  return new HasherStub()
 }
 
 const makeAddAccountRepository = (): AddAccountRepository => {
@@ -35,36 +35,36 @@ const makeFakeAccountData = (): AddAccountModel => ({
 })
 
 interface SutTypes {
-  encrypterStub: Encrypter
+  HasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   sut: DbAddAccount
 }
 
 const makeSut = (): SutTypes => {
-  const encrypterStub = makeEncrypter()
+  const HasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
+  const sut = new DbAddAccount(HasherStub, addAccountRepositoryStub)
   return {
-    encrypterStub,
+    HasherStub,
     addAccountRepositoryStub,
     sut
   }
 }
 
 describe('DbAddAccount Usecase', () => {
-  test('Should call encrypter with correct password', async () => {
-    const { sut, encrypterStub } = makeSut()
+  test('Should call Hasher with correct password', async () => {
+    const { sut, HasherStub } = makeSut()
 
-    const encryptSpy = vitest.spyOn(encrypterStub, 'encrypt')
+    const hashSpy = vitest.spyOn(HasherStub, 'hash')
     await sut.add(makeFakeAccountData())
-    expect(encryptSpy).toHaveBeenCalledWith('valid_password')
+    expect(hashSpy).toHaveBeenCalledWith('valid_password')
   })
 
-  test('Should throw if encrypter throws', async () => {
-    const { sut, encrypterStub } = makeSut()
+  test('Should throw if Hasher throws', async () => {
+    const { sut, HasherStub } = makeSut()
 
     vitest
-      .spyOn(encrypterStub, 'encrypt')
+      .spyOn(HasherStub, 'hash')
       .mockReturnValueOnce(new Promise(
         (resolve, reject) => {
           reject(new Error())
