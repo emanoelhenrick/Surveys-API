@@ -5,7 +5,7 @@ import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import env from '../config/env'
 // import app from '../config/app'
 
-describe('SignUp Routes', () => {
+describe('Login Routes', () => {
   const MONGO_URL = env.mongoUrl
 
   beforeAll(async () => {
@@ -23,15 +23,17 @@ describe('SignUp Routes', () => {
     await MongoHelper.disconnect()
   })
 
-  test('Should return an account on success', async () => {
-    // await request(app)
-    //   .post('/api/signup')
-    //   .send({
-    //     name: 'Manel',
-    //     email: 'manel@mail.com',
-    //     password: '123456',
-    //     passwordConfirmation: '123456'
-    //   })
-    //   .expect(200)
+  describe('POST /signup', () => {
+    test('Should return an account on success', async () => {
+      // await request(app)
+      //   .post('/api/signup')
+      //   .send({
+      //     name: 'Manel',
+      //     email: 'manel@mail.com',
+      //     password: '123456',
+      //     passwordConfirmation: '123456'
+      //   })
+      //   .expect(200)
+    })
   })
 })
