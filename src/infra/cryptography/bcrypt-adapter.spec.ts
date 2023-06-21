@@ -31,7 +31,7 @@ describe('Bcrypt Adapter', () => {
       .toBeTruthy()
   })
 
-  test('Should throws if bcrypt throws', async () => {
+  test('Should throws if hash throws', async () => {
     const { sut } = makeSut()
 
     vitest
@@ -63,5 +63,19 @@ describe('Bcrypt Adapter', () => {
     const { sut } = makeSut()
     const isValid = await sut.compare('invalid_value', 'any_hash')
     expect(isValid).toBeFalsy()
+  })
+
+  test('Should throws if compare throws', async () => {
+    const { sut } = makeSut()
+
+    vitest
+      .spyOn(bcrypt, 'compare')
+      .mockImplementationOnce(async () =>
+        await new Promise((resolve, reject) => {
+          reject(new Error())
+        }))
+
+    const promise = sut.compare('any_value', 'any_hash')
+    await expect(promise).rejects.toThrow()
   })
 })
