@@ -1,6 +1,6 @@
 {
   "name": "auth-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Authentication API made with clean architecture and DDD",
   "main": "src/main/server.ts",
   "scripts": {
