@@ -1,5 +1,5 @@
 import { describe, expect, test, vitest } from 'vitest'
-import { makeLoginValidation } from './login-validation'
+import { makeLoginValidation } from './login-validation-factory'
 import { type EmailValidator } from '../../../presentation/protocols/email-validator'
 import { type Validation } from '../../../presentation/protocols/validation'
 import { EmailValidation, RequiredFieldValidation, ValidationComposite } from '../../../presentation/helpers/validators'

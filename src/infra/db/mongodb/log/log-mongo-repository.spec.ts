@@ -2,7 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { MongoHelper } from '../helpers/mongo-helper'
 import env from '../../../../main/config/env'
 import { type Collection } from 'mongodb'
-import { LogMongoRepository } from './log'
+import { LogMongoRepository } from './log-mongo-repository'
 
 const makeSut = (): LogMongoRepository => new LogMongoRepository()
 
