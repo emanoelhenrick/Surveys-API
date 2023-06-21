@@ -12,7 +12,7 @@ export class DbAuthentication implements Authentication {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
     private readonly Encrypter: Encrypter,
-    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
+    private readonly UpdateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
 
   async auth (authentication: AuthenticationModel): Promise<string | null> {
@@ -21,7 +21,7 @@ export class DbAuthentication implements Authentication {
     const isValid = await this.hashComparer.compare(authentication.password, account.password)
     if (!isValid) return null
     const accessToken = await this.Encrypter.encrypt(account.id)
-    await this.updateAccessTokenRepository.update(account.id, accessToken)
+    await this.UpdateAccessTokenRepository.updateAccessToken(account.id, accessToken)
     return accessToken
   }
 }

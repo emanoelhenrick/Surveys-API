@@ -50,7 +50,7 @@ const makeEncrypter = (): Encrypter => {
 
 const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
-    async update (id: string, token: string): Promise<string> {
+    async updateAccessToken (id: string, token: string): Promise<string> {
       return await new Promise(resolve => { resolve('any_token') })
     }
   }
@@ -62,19 +62,19 @@ interface SutTypes {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
   EncrypterStub: Encrypter
-  updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
+  UpdateAccessTokenRepositoryStub: UpdateAccessTokenRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
   const hashComparerStub = makeHashComparer()
   const EncrypterStub = makeEncrypter()
-  const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository()
+  const UpdateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository()
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
     EncrypterStub,
-    updateAccessTokenRepositoryStub
+    UpdateAccessTokenRepositoryStub
   )
 
   return {
@@ -82,7 +82,7 @@ const makeSut = (): SutTypes => {
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
     EncrypterStub,
-    updateAccessTokenRepositoryStub
+    UpdateAccessTokenRepositoryStub
   }
 }
 
@@ -161,15 +161,15 @@ describe('DbAuthentication UseCase', () => {
   })
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {
-    const { sut, updateAccessTokenRepositoryStub } = makeSut()
-    const updateSpy = vi.spyOn(updateAccessTokenRepositoryStub, 'update')
+    const { sut, UpdateAccessTokenRepositoryStub } = makeSut()
+    const updateAccessTokenSpy = vi.spyOn(UpdateAccessTokenRepositoryStub, 'updateAccessToken')
     await sut.auth(makeFakeAuthentication())
-    expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token')
+    expect(updateAccessTokenSpy).toHaveBeenCalledWith('any_id', 'any_token')
   })
 
   test('Should throw if UpdateAccessTokenRepository throws', async () => {
-    const { sut, updateAccessTokenRepositoryStub } = makeSut()
-    vi.spyOn(updateAccessTokenRepositoryStub, 'update')
+    const { sut, UpdateAccessTokenRepositoryStub } = makeSut()
+    vi.spyOn(UpdateAccessTokenRepositoryStub, 'updateAccessToken')
       .mockReturnValueOnce(new Promise((resolve, reject) => {
         reject(new Error())
       }))
