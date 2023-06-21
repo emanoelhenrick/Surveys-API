@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { InvalidParamError } from '../../errors'
-import { CompareFieldsValidation } from './compare-fields-validation.ts'
+import { CompareFieldsValidation } from './compare-fields-validation'
 
 describe('Compare Fields Validation', () => {
   test('Should return a InvalidParamError if validation fails', () => {
