@@ -8,6 +8,7 @@
     "up": "npm run build && docker compose up -d",
     "down": "docker compose down",
     "start": "node dist/main/server.js",
+    "debug": "node --inspect=0.0.0.0:10500 --nolazy dist/main/server.js",
     "build": "rimraf dist && tsc",
     "test": "vitest",
     "test:unit": "vitest -c vitest-unit.config.ts",

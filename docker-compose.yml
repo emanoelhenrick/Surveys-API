@@ -18,10 +18,12 @@ services:
     build: .
     image: auth-api
     restart: always
-    command: npm start
+    command: npm run debug
     volumes:
       - ./dist:/usr/src/auth-api/dist
+      - ./package.json:/usr/src/auth-api/package.json
     ports:
       - "10000:10000"
+      - "10500:10500"
     links:
       - mongo
