@@ -5,6 +5,8 @@
   "main": "src/main/server.ts",
   "scripts": {
     "dev": "tsx watch src/main/server.ts",
+    "up": "npm run build && docker compose up -d",
+    "down": "docker compose down",
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
     "test": "vitest",
