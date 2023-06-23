@@ -2,4 +2,5 @@
 /coverage
 /dist
 /data
+!src/data
 .env*

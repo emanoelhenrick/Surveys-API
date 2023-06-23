@@ -4,3 +4,4 @@ coverage
 vitest-unit.config.ts
 vitest-integration.config.ts
 vitest.config.ts
+./data
