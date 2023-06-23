@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { InvalidParamError } from '../../errors'
+import { InvalidParamError } from '../../presentation/errors'
 import { CompareFieldsValidation } from './compare-fields-validation'
 
 describe('Compare Fields Validation', () => {

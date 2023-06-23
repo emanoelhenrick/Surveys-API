@@ -1,5 +1,5 @@
-import { type EmailValidator } from '../../protocols/email-validator'
-import { InvalidParamError, ServerError } from '../../errors'
+import { type EmailValidator } from '../protocols/email-validator'
+import { InvalidParamError, ServerError } from '../../presentation/errors'
 import { describe, expect, test, vitest } from 'vitest'
 import { EmailValidation } from './email-validation'
 
