@@ -12,7 +12,7 @@ describe('Login Routes', () => {
   const MONGO_URL = env.mongoUrl
 
   beforeAll(async () => {
-    await MongoHelper.connect(MONGO_URL, 'dev')
+    await MongoHelper.connect(MONGO_URL!, 'dev')
   })
 
   beforeEach(async () => {
