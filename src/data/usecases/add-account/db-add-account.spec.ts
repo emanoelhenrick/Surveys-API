@@ -1,7 +1,8 @@
-import { describe, expect, test, vitest } from 'vitest'
+import { describe, expect, test, vi, vitest } from 'vitest'
 import { DbAddAccount } from './db-add-account'
 import { type Hasher } from '../../protocols/criptography/hasher'
 import { type AddAccountRepository, type AccountModel, type AddAccountModel } from './db-add-account-procotols'
+import { type LoadAccountByEmailRepository } from '../authentication/db-authentication-protocols'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -10,6 +11,16 @@ const makeHasher = (): Hasher => {
     }
   }
   return new HasherStub()
+}
+
+const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async loadByEmail (email: string): Promise<AccountModel> {
+      const account = makeFakeAccount()
+      return await new Promise(resolve => { resolve(account) })
+    }
+  }
+  return new LoadAccountByEmailRepositoryStub()
 }
 
 const makeAddAccountRepository = (): AddAccountRepository => {
@@ -37,16 +48,19 @@ const makeFakeAccountData = (): AddAccountModel => ({
 interface SutTypes {
   HasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   sut: DbAddAccount
 }
 
 const makeSut = (): SutTypes => {
   const HasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(HasherStub, addAccountRepositoryStub)
+  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
+  const sut = new DbAddAccount(HasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)
   return {
     HasherStub,
     addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub,
     sut
   }
 }
@@ -104,5 +118,12 @@ describe('DbAddAccount Usecase', () => {
     const { sut } = makeSut()
     const account = await sut.add(makeFakeAccountData())
     expect(account).toEqual(makeFakeAccount())
+  })
+
+  test('Should call LoadAccountByEmailRepository with correct email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    await sut.add(makeFakeAccountData())
+    expect(loadSpy).toHaveBeenCalledWith('valid_email@mail.com')
   })
 })
