@@ -1,8 +1,14 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    include: ['**\/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']
+    include: ['**\/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '**/data/**',
+    ]
   }
 })

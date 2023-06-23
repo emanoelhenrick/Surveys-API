@@ -1,7 +1,11 @@
-import ('dotenv/config')
+import * as dotenv from 'dotenv'
+
+dotenv.config({
+  path: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env'
+})
 
 export default {
-  mongoUrl: process.env.MONGO_URL ?? 'mongodb://docker:docker@localhost:27017/?authMechanism=DEFAULT',
-  port: process.env.PORT ?? 10000,
+  mongoUrl: process.env.MONGO_URL,
+  port: process.env.PORT,
   jwt_secret: process.env.JWT_SECRET ?? 'jl39cjjhkdf3h2'
 }

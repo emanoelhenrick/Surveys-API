@@ -4,17 +4,17 @@
   "description": "A Authentication API made with clean architecture and DDD",
   "main": "src/main/server.ts",
   "scripts": {
-    "dev": "tsx watch src/main/server.ts",
+    "dev": "NODE_ENV=dev tsx watch src/main/server.ts",
     "dev:docker": "nodemon -L --watch ./dist ./dist/main/server.js",
     "up": "npm run build && docker compose up -d",
     "down": "docker compose down",
     "start": "node dist/main/server.js",
     "debug": "node --inspect=0.0.0.0:10500 --nolazy dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "test": "vitest",
-    "test:unit": "vitest -c vitest-unit.config.ts",
-    "test:integration": "vitest -c vitest-integration.config.ts",
-    "test:coverage": "vitest --coverage"
+    "test": "NODE_ENV=dev vitest",
+    "test:unit": "NODE_ENV=dev vitest -c vitest-unit.config.ts",
+    "test:integration": "NODE_ENV=dev vitest -c vitest-integration.config.ts",
+    "test:coverage": "NODE_ENV=dev vitest --coverage"
   },
   "keywords": [],
   "author": "Emanoel Henrick",
