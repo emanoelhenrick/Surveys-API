@@ -1,8 +1,8 @@
 import { type HttpRequest, type AccountModel, type AddAccount, type AddAccountModel, type Validation, type Authentication, type AuthenticationModel } from './signup-controller-protocols'
-import { MissingParamError, ServerError } from '../../errors'
-import { describe, expect, test, vitest } from 'vitest'
+import { EmailInUseError, MissingParamError, ServerError } from '../../errors'
+import { describe, expect, test, vi, vitest } from 'vitest'
 import { SignUpController } from './signup-controller'
-import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
+import { badRequest, forbidden, ok, serverError } from '../../helpers/http/http-helper'
 
 interface SutTypes {
   sut: SignUpController
@@ -99,6 +99,13 @@ describe('SignUp Controller', () => {
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null as unknown as string)))
+  })
+
+  test('Should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    vi.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => { resolve(null) }))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 
   test('Should return 200 if valid data is provided', async () => {
