@@ -9,7 +9,7 @@ let accountCollection: Collection
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(MONGO_URL, 'dev')
+    await MongoHelper.connect(MONGO_URL!, 'dev')
   })
 
   afterAll(async () => {

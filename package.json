@@ -1,7 +1,7 @@
 {
-  "name": "auth-api",
+  "name": "surveys-api",
   "version": "1.2.3",
-  "description": "A Authentication API made with clean architecture and DDD",
+  "description": "A Surveys API made with clean architecture and DDD",
   "main": "src/main/server.ts",
   "scripts": {
     "dev": "NODE_ENV=dev tsx watch src/main/server.ts",
