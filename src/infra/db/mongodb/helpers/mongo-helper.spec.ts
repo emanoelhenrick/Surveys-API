@@ -4,7 +4,7 @@ import env from '../../../../main/config/env'
 
 describe('Mongo Helper', () => {
   beforeAll(async () => {
-    await sut.connect(env.mongoUrl, 'dev')
+    await sut.connect(env.mongoUrl!, 'dev')
   })
 
   afterAll(async () => {
