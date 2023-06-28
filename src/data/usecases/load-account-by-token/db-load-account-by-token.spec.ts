@@ -78,4 +78,14 @@ describe('DbLoadAccountByToken Usecase', () => {
     const account = await sut.load('any_token', 'any_role')
     expect(account).toEqual(makeFakeAccount())
   })
+
+  test('Should throw if Decrypter throws', async () => {
+    const { sut, decrypterStub } = makeSut()
+    vi.spyOn(decrypterStub, 'decrypt')
+      .mockReturnValueOnce(new Promise((resolve, reject) => {
+        reject(new Error())
+      }))
+    const promise = sut.load('any_token', 'any_role')
+    await expect(promise).rejects.toThrow()
+  })
 })
