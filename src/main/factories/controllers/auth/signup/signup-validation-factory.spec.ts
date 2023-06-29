@@ -1,10 +1,10 @@
 import { describe, expect, test, vitest } from 'vitest'
 import { makeSignUpValidation } from './signup-validation-factory'
-import { type EmailValidator } from '../../../../validation/protocols/email-validator'
-import { type Validation } from '../../../../presentation/protocols/validation'
-import { CompareFieldsValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '../../../../validation/validators'
+import { type EmailValidator } from '../../../../../validation/protocols/email-validator'
+import { type Validation } from '../../../../../presentation/protocols/validation'
+import { CompareFieldsValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '../../../../../validation/validators'
 
-vitest.mock('../../../../validation/validators/validation-composite')
+vitest.mock('../../../../../validation/validators/validation-composite')
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
