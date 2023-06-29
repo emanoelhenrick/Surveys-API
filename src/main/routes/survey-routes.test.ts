@@ -21,12 +21,15 @@ describe('Survey Routes', () => {
     await request(app).post('/api/surveys')
     surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('accounts')
-    await request(app).post('/api/surveys')
-    // if (accountCollection) await accountCollection.deleteMany({})
-    // if (surveyCollection) await surveyCollection.deleteMany({})
+    if (accountCollection) await accountCollection.deleteMany({})
+    if (surveyCollection) await surveyCollection.deleteMany({})
   })
 
   afterAll(async () => {
+    surveyCollection = await MongoHelper.getCollection('surveys')
+    accountCollection = await MongoHelper.getCollection('accounts')
+    if (accountCollection) await accountCollection.drop()
+    if (surveyCollection) await surveyCollection.drop()
     await MongoHelper.disconnect()
   })
 
@@ -37,13 +40,8 @@ describe('Survey Routes', () => {
         .send({
           question: 'Question',
           answers: [
-            {
-              answer: 'Answer 1',
-              image: 'http://image-name.com'
-            },
-            {
-              answer: 'Answer 2'
-            }
+            { answer: 'Answer 1', image: 'http://image-name.com' },
+            { answer: 'Answer 2' }
           ]
         })
         .expect(403)
@@ -68,13 +66,8 @@ describe('Survey Routes', () => {
         .send({
           question: 'Question',
           answers: [
-            {
-              answer: 'Answer 1',
-              image: 'http://image-name.com'
-            },
-            {
-              answer: 'Answer 2'
-            }
+            { answer: 'Answer 1', image: 'http://image-name.com' },
+            { answer: 'Answer 2' }
           ]
         })
         .expect(204)
