@@ -6,11 +6,12 @@ import { type LoadAccountByToken } from '../../domain/usecases/load-account-by-t
 import { type AccountModel } from '../../domain/models/account'
 import { type HttpRequest } from '../protocols'
 
-const makeFakeAccount = (): AccountModel => ({
+const makeFakeAccount = (): any => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
-  password: 'hashed_password'
+  password: 'hashed_password',
+  accessToken: 'any_token'
 })
 
 const makeFakeRequest = (): HttpRequest => ({

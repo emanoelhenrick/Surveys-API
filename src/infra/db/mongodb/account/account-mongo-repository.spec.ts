@@ -108,6 +108,7 @@ describe('Account Mongo Repository', () => {
         role: 'any_role'
       })
       const account = await sut.loadByToken('any-token', 'any_role')
+
       expect(account).toBeTruthy()
       expect(account!.id).toEqual(expect.any(String))
       expect(account!.name).toBe('any_name')
