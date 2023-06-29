@@ -6,13 +6,13 @@ const makeSut = (): JwtAdapter => {
   return new JwtAdapter('secret')
 }
 
-vi.spyOn(jwt, 'sign')
-  .mockImplementation(() => 'any_token')
-
-vi.spyOn(jwt, 'verify')
-  .mockImplementation(() => 'any_value')
-
 describe('JWT Adapter', () => {
+  vi.spyOn(jwt, 'sign')
+    .mockImplementation(() => 'any_token')
+
+  vi.spyOn(jwt, 'verify')
+    .mockImplementation(() => 'any_value')
+
   describe('sing()', () => {
     test('Should call sign with correct values', async () => {
       const sut = makeSut()
@@ -43,6 +43,12 @@ describe('JWT Adapter', () => {
       const verifySpy = vi.spyOn(jwt, 'verify')
       await sut.decrypt('any_token')
       expect(verifySpy).toHaveBeenCalledWith('any_token', 'secret')
+    })
+
+    test('Should return a value on verify success', async () => {
+      const sut = makeSut()
+      const value = await sut.decrypt('any_token')
+      expect(value).toBe('any_value')
     })
   })
 })
