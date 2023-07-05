@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 import { LoadSurveysController } from './load-surveys-controller'
-import { type SurveyModel, type LoadSurveys } from './load-surveys-controller-protocols'
+import { type SurveyModel, type LoadSurveys, serverError } from './load-surveys-controller-protocols'
 import MockDate from 'mockdate'
 import { ok } from './load-surveys-controller-protocols'
 
@@ -65,5 +65,13 @@ describe('LoadSurveys Controller', () => {
     const { sut } = makeSut()
     const response = await sut.handle({})
     expect(response).toEqual(ok(makeFakeSurveys()))
+  })
+
+  test('Should return 500 if LoadSurveys throws', async () => {
+    const { sut, loadSurveysStub } = makeSut()
+    vi.spyOn(loadSurveysStub, 'load')
+      .mockReturnValueOnce(new Promise((resolve, reject) => { reject(new Error()) }))
+    const response = await sut.handle({})
+    expect(response).toEqual(serverError(new Error()))
   })
 })
