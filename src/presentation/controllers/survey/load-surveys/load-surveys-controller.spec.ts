@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 import { LoadSurveysController } from './load-surveys-controller'
 import { type SurveyModel, type LoadSurveys } from './load-surveys-controller-protocols'
 import MockDate from 'mockdate'
+import { ok } from './load-surveys-controller-protocols'
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [{
@@ -52,10 +53,17 @@ describe('LoadSurveys Controller', () => {
   afterAll(() => {
     MockDate.reset()
   })
+
   test('Should call LoadSurveys', async () => {
     const { sut, loadSurveysStub } = makeSut()
     const loadSpy = vi.spyOn(loadSurveysStub, 'load')
     await sut.handle({})
     expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle({})
+    expect(response).toEqual(ok(makeFakeSurveys()))
   })
 })
