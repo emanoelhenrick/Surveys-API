@@ -41,8 +41,7 @@ describe('Survey Routes', () => {
           question: 'Question',
           answers: [
             { answer: 'Answer 1', image: 'http://image-name.com' },
-            { answer: 'Answer 2' }
-          ]
+            { answer: 'Answer 2' }]
         })
         .expect(403)
     })
