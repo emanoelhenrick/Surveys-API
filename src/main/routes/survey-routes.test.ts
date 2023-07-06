@@ -19,6 +19,7 @@ describe('Survey Routes', () => {
   })
 
   beforeEach(async () => {
+    await request(app).post('/api/surveys')
     surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('accounts')
     if (accountCollection) await accountCollection.deleteMany({})
