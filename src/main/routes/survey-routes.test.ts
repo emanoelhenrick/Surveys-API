@@ -9,6 +9,21 @@ import { sign } from 'jsonwebtoken'
 let surveyCollection: Collection
 let accountCollection: Collection
 
+const makeAccessToken = async (role?: string): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'Manel',
+    email: 'manel@email.com',
+    password: '123456',
+    role
+  })
+  const id = res.insertedId.toString()
+  const accessToken = sign({ id }, env.jwt_secret)
+  await accountCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { accessToken } })
+  return accessToken
+}
+
 describe('Survey Routes', () => {
   const MONGO_URL = env.mongoUrl
 
@@ -20,6 +35,7 @@ describe('Survey Routes', () => {
 
   beforeEach(async () => {
     await request(app).post('/api/surveys')
+    await request(app).get('/api/surveys')
     surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('accounts')
     if (accountCollection) await accountCollection.deleteMany({})
@@ -48,18 +64,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 if valid token', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'Manel',
-        email: 'manel@email.com',
-        password: '123456',
-        role: 'admin'
-      })
-      const id = res.insertedId.toString()
-      const accessToken = sign({ id }, env.jwt_secret)
-      await accountCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { accessToken } })
-
+      const accessToken = await makeAccessToken('admin')
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
@@ -82,16 +87,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 on load surveys with valid accessToken', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'Manel',
-        email: 'manel@email.com',
-        password: '123456'
-      })
-      const id = res.insertedId.toString()
-      const accessToken = sign({ id }, env.jwt_secret)
-      await accountCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { accessToken } })
+      const accessToken = await makeAccessToken()
       await request(app)
         .get('/api/surveys')
         .set('x-access-token', accessToken)
