@@ -15,10 +15,10 @@ describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(MONGO_URL!, 'dev')
     await request(app).post('/api/surveys')
+    await request(app).get('/api/surveys')
   })
 
   beforeEach(async () => {
-    await request(app).post('/api/surveys')
     surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('accounts')
     if (accountCollection) await accountCollection.deleteMany({})
@@ -70,6 +70,14 @@ describe('Survey Routes', () => {
           ]
         })
         .expect(204)
+    })
+  })
+
+  describe('GET /surveys', () => {
+    test('Should return 403 on load surveys without access token', async () => {
+      await request(app)
+        .get('/api/surveys')
+        .expect(403)
     })
   })
 })
