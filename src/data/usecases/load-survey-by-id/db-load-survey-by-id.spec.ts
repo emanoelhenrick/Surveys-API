@@ -57,4 +57,14 @@ describe('DbLoadSurveys', () => {
     const response = await sut.loadById('any_id')
     expect(response).toEqual(makeFakeSurvey())
   })
+
+  test('Should throw if LoadSurveyByIdRepository throws', async () => {
+    const { sut, loadSurveyByIdRepositoryStub } = makeSut()
+    vi.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
+      .mockReturnValueOnce(new Promise((resolve, reject) => {
+        reject(new Error())
+      }))
+    const promise = sut.loadById('any_id')
+    await expect(promise).rejects.toThrow()
+  })
 })
